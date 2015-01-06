@@ -39,7 +39,7 @@ class Browsershot {
      * @param int $width
      * @param int $height
      */
-    public function __construct($binPath = '', $width = 640, $height = 480, $forceSSL = false)
+    public function __construct($binPath = '', $width = 640, $height = 480)
     {
         if ($binPath == '') {
             $binPath = realpath(dirname(__FILE__) . '/../../../bin/phantomjs');
@@ -48,7 +48,6 @@ class Browsershot {
         $this->binPath = $binPath;
         $this->width = $width;
         $this->height = $height;
-        $this->forceSSL = $forceSSL;
         
         return $this;
     }
@@ -107,7 +106,18 @@ class Browsershot {
         $this->URL = $url;
         return $this;
     }
-
+	
+    /**
+     * Force SSL pages to render
+     * 
+     * @return $this
+     * 
+     */
+    public function forceSSL() {
+    	$this->forceSSL = true;
+    	return $this;
+    }
+    
     /**
      *
      * Convert the webpage to an image
@@ -149,7 +159,7 @@ class Browsershot {
                window.setTimeout(function(){
                 page.render('" . $targetFile . "');
                 phantom.exit();
-            }, 5000); // give phantomjs 5 seconds to process all javascript
+            }, 3000); // give phantomjs 5 seconds to process all javascript
         });";
 
         fwrite($tempJsFileHandle, $fileContent);
