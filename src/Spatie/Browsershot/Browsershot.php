@@ -29,13 +29,17 @@ class Browsershot {
      */
     private $binPath;
 
+    /**
+     * @var boolean
+     */
+    private $forceSSL;
 
     /**
      * @param string $binPath The path to the phantomjs binary
      * @param int $width
      * @param int $height
      */
-    public function __construct($binPath = '', $width = 640, $height = 480)
+    public function __construct($binPath = '', $width = 640, $height = 480, $forceSSL = false)
     {
         if ($binPath == '') {
             $binPath = realpath(dirname(__FILE__) . '/../../../bin/phantomjs');
@@ -44,7 +48,8 @@ class Browsershot {
         $this->binPath = $binPath;
         $this->width = $width;
         $this->height = $height;
-
+        $this->forceSSL = $forceSSL;
+        
         return $this;
     }
 
@@ -149,6 +154,10 @@ class Browsershot {
 
         fwrite($tempJsFileHandle, $fileContent);
         $tempFileName = stream_get_meta_data($tempJsFileHandle)['uri'];
+
+        if($this->forceSSL) {
+            $this->binPath .= " --ignore-ssl-errors=true --ssl-protocol=any ";
+        }
         $cmd = escapeshellcmd("{$this->binPath} " . $tempFileName);
 
         shell_exec($cmd);
