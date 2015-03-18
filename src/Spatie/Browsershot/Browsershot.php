@@ -3,7 +3,7 @@
 namespace Spatie\Browsershot;
 
 use Exception;
-use \Intervention\Image\Image;
+use Intervention\Image\Facades\Image;
 
 /**
  * Class Browsershot
